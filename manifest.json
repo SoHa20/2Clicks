@@ -14,11 +14,14 @@
   "content_scripts": [
     {
       "matches": [
-        "*://*.mozilla.org/*"
+        "<all_urls>"
       ],
       "js": [
         "content_script.js"
-      ]
+      ],
+	  "run_at":
+		"document_idle"
+
     }
   ],
   "browser_action": {
@@ -34,5 +37,17 @@
     },
     "default_popup": "pageAction/index.html",
     "default_title": "2Clicks"
-  }
+  },
+  
+  "options_ui": {
+    "page": "options.html"
+  },
+
+  "permissions": ["storage"],
+
+  "browser_specific_settings": {
+	"gecko": {
+      "id": "2click@example.com"
+    }
+	}
 }

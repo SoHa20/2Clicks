@@ -5,7 +5,23 @@
     <link href="style.css" rel="stylesheet" />
   </head>
   <body>
-    <h1 id="myHeading">My content</h1>
+    <h1 id="myHeading">Take charge of your web experience!</h1>
     <script src="script.js"></script>
-  </body>
+	<p> This WebExtension currently in development will stop Facebook from 
+	tracking you by blocking their social media plugins on websites you visit. 
+	Don't worry, you can activate them with just one click if you ever need them!
+	</p>
+	<div id="Permaconsent">
+		<form>
+		<p> Always allow Facebook plug-ins: <p>
+		<fieldset>
+		<input type="radio" id="facebookDefault" name="facebookOpt" value="false">
+		<label for "facebookDefault"> No </label>
+		<input type="radio" id="facebookPermaOptIn" name="facebookOpt" value="true">
+		<label for "facebookPermaOptIn"> Yes </label>
+		<button type="submit">Save</button>
+		</fieldset>
+		</form>
+		</div>
+	</body>
 </html>
