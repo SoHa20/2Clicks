@@ -26,6 +26,8 @@ for (var i=0; i < scripts.length; i++) {
 	}
 }*/
 
+var consentGiven; 
+
 const observer = new MutationObserver (function(mutations) {
 	mutations.forEach(({ addedNodes}) => {
 		addedNodes.forEach(node => {
@@ -34,25 +36,34 @@ const observer = new MutationObserver (function(mutations) {
 			if (node.nodeType === 1 && node.nodeName === 'SCRIPT') {
 				console.log("found a script!");
 				const src = node.src;
-				const type = node.type
+				const type = node.type;
 				//const type = node.type;
 				console.log(src);
-					if (onBlocklist(src)) { // (src, type)
-						// block script if on blocklist
-						node.type = 'javascript/blocked' ;
-						const beforeScriptExecuteListener = function(event) {
-							console.log("Does this work?");
-							if (node.getAttribute('type') === 'javascript/blocked') {
-								event.preventDefault();
-								var placement = node.parentNode;
-								var toggleButton = document.createElement('button'); 
-								toggleButton.innerHTML = "Click me!"; //make this more explaining, add style of switch
-								placement.appendChild(toggleButton);
+				if (onBlocklist(src)) { // (src, type)
+					switch(node.id) {
+						case "twitterConsented":
+							console.log('Consent given');
+							break; 
+						
+						default : 
+							// block script if on blocklist
+							node.type = 'javascript/blocked' ;
+							const beforeScriptExecuteListener = function(event) {
+								console.log("Does this work?");
+								if (node.getAttribute('type') === 'javascript/blocked') {
+									event.preventDefault();
+									var placement = node.parentNode;
+									var toggleButton = document.createElement('button'); 
+									toggleButton.innerHTML = "Click me!"; //make this more explaining, add style of switch
+									toggleButton.addEventListener("click",function(){executeOrigScript(document,src, 'twitterConsented', placement);});
+									placement.appendChild(toggleButton);
+								}
+								node.removeEventListener('beforescriptexecute', beforeScriptExecuteListener);
 							}
-							node.removeEventListener('beforescriptexecute', beforeScriptExecuteListener);
-						}
-					node.addEventListener('beforescriptexecute', beforeScriptExecuteListener);
+							node.addEventListener('beforescriptexecute', beforeScriptExecuteListener);
 					}
+				}
+						//node.addEventListener('beforescriptexecute', beforeScriptExecuteListener);
 			}
 		});
 	});
@@ -75,17 +86,23 @@ function onBlocklist(src) {
 	if (src === "https://platform.twitter.com/widgets.js"){
 		console.log("Found a twitter Plug in Script!");
 		return true; 
-	} else 
+	}//if (src === "https://platform.twitter.com/js/button.683df8cb64b87a8e4759b1fa17147ad1.js"){
+		//console.log("Found a twitter Plug in Script!");
+		//return true; 
+	//}
+	else 
 		return false; 
 		
 }
 
-/*function executeOrigScript(d,source, id, node){
-	newScript = d.createElement(script); 
+function executeOrigScript(d,source, id, node){
+	console.log('Button clicked');
+	consentGiven = true; 
+	newScript = d.createElement('script'); 
 	newScript.id = id; 
 	newScript.src = source; 
 	node.appendChild(newScript);
-}*/
+}
 	
 /*function doubleclickreplacement(node){
 	//var placement = document.getElementsByClassName("fb-share-button")
