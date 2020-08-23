@@ -3,44 +3,70 @@
 
 //global variable for given consent 
 console.log("Hi");
+/*let scripts = document.scripts;
+console.log(scripts);
+for (var i=0; i < scripts.length; i++) {
+	console.log("Nummer: " + i);
+	console.log(scripts.item(i).src);
+	if (onBlocklist(scripts.item(i).src)){
+		console.log("blah");
+		source = scripts.item(i).src; 
+		//const beforeScriptExecuteListener = function(event) {
+			//event.preventDefault();
+			var toReplace = scripts.item(i);
+			var placement = scripts.item(i).parentNode;
+			var toggleButton = document.createElement(button); 
+			toggleButton.innerHTML = "Click me!";
+			placement.appendChild(toggleButton);
+			//toReplace.remove();
+			//toggleButton.addEventListener("click", executeOrigScript(document, source,'twitterscript', placement));
+			//toggleButton.addEventListener("mouseover", displayExplanation);
+			
+		//}
+	}
+}*/
 
 const observer = new MutationObserver (function(mutations) {
 	mutations.forEach(({ addedNodes}) => {
-		addedNotes.forEach(node => {
-			console.log("Node found" + node.nodeType + "type" + node.nodeName);
+		addedNodes.forEach(node => {
+			console.log("Node found, type:  " + node.nodeType + " name: " + node.nodeName);
 			//check for static scripts being added to the DOM 
-			/*if (node.nodeType === 1 && node.nodeName === 'script') {
-				const src = node.src || '' 
+			if (node.nodeType === 1 && node.nodeName === 'SCRIPT') {
+				console.log("found a script!");
+				const src = node.src;
+				const type = node.type
 				//const type = node.type;
-				//switch (consentGiven) {
-						//case true: 
-							//console.log("Facebook consent given");
-							//break;
-						//case false: 
-							if (onBlocklist(src)) { // (src, type)
-								// block script if on blocklist
-								node.type = 'blocked' ;
-								const beforeScriptExecuteListener = function(event) {
-									console.log("Does this work?");
-									//if (node.getAttribute('type' === 'blocked')) {
-									//event.preventDefault();
-									//doubleclickreplacement(node);
-									}
-								}
-							}*/
-				});
-						node.removeEventListener('beforescriptexecute', beforeScriptExecuteListener);
-			});
+				console.log(src);
+					if (onBlocklist(src)) { // (src, type)
+						// block script if on blocklist
+						node.type = 'javascript/blocked' ;
+						const beforeScriptExecuteListener = function(event) {
+							console.log("Does this work?");
+							if (node.getAttribute('type') === 'javascript/blocked') {
+								event.preventDefault();
+								var placement = node.parentNode;
+								var toggleButton = document.createElement('button'); 
+								toggleButton.innerHTML = "Click me!"; //make this more explaining, add style of switch
+								placement.appendChild(toggleButton);
+							}
+							node.removeEventListener('beforescriptexecute', beforeScriptExecuteListener);
+						}
 					node.addEventListener('beforescriptexecute', beforeScriptExecuteListener);
-					
+					}
+			}
 		});
-	//});
+	});
+});
 
-//});
+observer.observe(document.documentElement, {
+    childList: true,
+    subtree: true
+});
+//});*/
 
 // match this "https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fdevelopers.facebook.com%2Fdocs%2Fplugins%2F&amp;src=sdkpreparse" - div
 // or sdk script src="https://connect.facebook.net/de_DE/sdk.js#xfbml=1&version=v8.0"
-function onBlocklist(src, type) {
+function onBlocklist(src) {
 	//Determine whether to block the script or not by comparing to blocklist
 	//if (type === 1 && (src.includes("facebook") && src.includes("sdk.js"))) {
 		//return true
@@ -53,17 +79,25 @@ function onBlocklist(src, type) {
 		return false; 
 		
 }
+
+/*function executeOrigScript(d,source, id, node){
+	newScript = d.createElement(script); 
+	newScript.id = id; 
+	newScript.src = source; 
+	node.appendChild(newScript);
+}*/
+	
 /*function doubleclickreplacement(node){
 	//var placement = document.getElementsByClassName("fb-share-button")
-	var toggleButton = document.createElement(button) 
+	/*var toggleButton = document.createElement(button) 
 	toggleButton.id = 'toggleButton';
 	toggleButton.innerHTML = "Click me!" ;//TODO: change this, preferably to switch with mouseover explanation
 	node.appendChild(toggleButton);
 	toggleButton.addEventListener("click", executeOrigScript(document, 'script', 'facebook-jssdk'))
 	toggleButton.addEventListener("mouseover", displayExplanation) 
-}
+}*/
 
-function executeOrigScript(d,s,id){
+/*function executeOrigScript(d,s,id){
 //load facebook sdk
 	consentGiven = true; 
 	var js, fjs = d.getElementsByTagName(s)[0];
@@ -78,4 +112,3 @@ function executeOrigScript(d,s,id){
 
 //function displayExplanation()
 // short text explaining what's happening
-console.log("Ich laufe gerade!");
