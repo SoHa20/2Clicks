@@ -6,11 +6,7 @@
   "icons": {
     "64": "icons/icon.png"
   },
-  "background": {
-    "scripts": [
-      "background_script.js"
-    ]
-  },
+
   "content_scripts": [
     {
       "matches": [
@@ -39,10 +35,6 @@
     "default_title": "2Clicks"
   },
   
-  "options_ui": {
-    "page": "options.html"
-  },
-
   "permissions": ["storage"],
 
   "browser_specific_settings": {
