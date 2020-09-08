@@ -1,5 +1,4 @@
-// executed at document_start, while page(s) loads
-//my testpage is here: file:///C:/Users/sophi/OneDrive/Dokumente/Studium/BA/2clicks/testpage.html
+// executed at document_start, while page loads
 
 console.log("Hi");
 
@@ -33,6 +32,7 @@ const observer = new MutationObserver (function(mutations) {
 									var toggleButton = document.createElement('button'); 
 									toggleButton.innerHTML = "activate"; 
 									toggleButton.addEventListener("click",function(){executeOrigScript(document,src, 'twitterConsented', placement);});
+									toggleButton.addEventListener("mouseover", appendExplanation);
 									placement.appendChild(toggleButton);
 								}
 								node.removeEventListener('beforescriptexecute', beforeScriptExecuteListener);
@@ -69,4 +69,9 @@ function executeOrigScript(d,source, id, node){
 	newScript.src = source; 
 	node.appendChild(newScript);
 }
-	
+function appendExplanation(){
+	var explanation = document.createElement('p');
+	var explanationText = document.createTextNode("This button activates the twitter plug-in, which will set cookies");
+	explanation.appendChild(explanationText);
+	document.body.appendChild(explanation);
+}
